@@ -26,5 +26,5 @@ http://localhost:8080/todos
 이 프로젝트는 REST API를 지향합니다. 어플리케이션을 실행한 후 [스웨거 링크](http://localhost:8080/swagger-ui.html#/to-do-list-controller)로 접속하면 REST API를 확인할 수 있습니다.
 
 ## 데이터베이스
-이 프로젝트는 메모리 데이터 베이스인 [h2 database](http://www.h2database.com/html/main.html)를 사용합니다. 어플리케이션을 재실행하면 저장된 데이터는 모두 초기화됩니다. 실행 시 [data.sql](https://github.com/yoonje/spring-todo-list/blob/main/src/main/resources/data.sql)에 저장된 쿼리를 실행하여 더미 데이터를 삽입합니다.
+이 프로젝트는 메모리 데이터 베이스인 [h2 database](http://www.h2database.com/html/main.html)를 사용합니다. 어플리케이션을 재실행하면 저장된 데이터는 모두 초기화됩니다. 실행 시 [data.sql](https://github.com/yoonje/spring-boot-todo-list/blob/master/src/main/resources/data.sql)에 저장된 쿼리를 실행하여 더미 데이터를 삽입합니다.
 ![image](https://user-images.githubusercontent.com/12438898/52914598-b8d3f200-330d-11e9-803f-077837b0ac45.png)
