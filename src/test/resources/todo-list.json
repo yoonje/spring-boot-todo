@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "description": "집안일",
+    "createDateTime": "2019-02-16T06:30:16+09:00",
+    "updateDateTime": "2019-02-16T06:30:16+09:00",
+    "status": "closed"
+  },
+  {
+    "id": 2,
+    "description": "빨래",
+    "createDateTime": "2019-02-16T06:30:16+09:00",
+    "updateDateTime": "2019-02-16T06:30:16+09:00",
+    "status": "open",
+    "references": [
+      {
+        "id": 1,
+        "referredId": 1
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "description": "청소",
+    "createDateTime": "2019-02-16T06:30:16+09:00",
+    "updateDateTime": "2019-02-16T06:30:16+09:00",
+    "status": "open",
+    "references": [
+      {
+        "id": 2,
+        "referredId": 1
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "description": "방청소",
+    "createDateTime": "2019-02-16T06:30:16+09:00",
+    "updateDateTime": "2019-02-16T06:30:16+09:00",
+    "status": "open",
+    "references": [
+      {
+        "id": 3,
+        "referredId": 1
+      },
+      {
+        "id": 4,
+        "referredId": 3
+      }
+    ]
+  }
+]

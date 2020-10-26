@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>TO-DO LIST</title>
+</head>
+<body>
+<div style="margin: 20px 10% 20px 10%;">
+    <div>
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand">TODO LIST</a>
+            <form class="form-inline">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button"
+                        data-toggle="modal" data-target="#create-modal">새 할일
+                </button>
+            </form>
+        </nav>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <colgroup>
+                <col/>
+                <col/>
+                <col width="50%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">상태</th>
+                <th scope="col">#</th>
+                <th scope="col">할일</th>
+                <th scope="col">작성일시</th>
+                <th scope="col">최종수정일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="todo : ${list}">
+                <tr data-toggle="collapse" th:href="@{'#todo-collapse-'+${todo.id}}" role="button" aria-expanded="false"
+                    th:attr="aria-controls='todo-collapse-'+${todo.id}">
+                    <td>
+                        <span th:if="${#strings.equalsIgnoreCase(todo.status, 'open')}"> 🔲 </span>
+                        <span th:if="${#strings.equalsIgnoreCase(todo.status, 'closed')}"> ☑️ </span>
+                    </td>
+                    <th scope="row" th:text="${todo.id}"></th>
+                    <td>
+                        <div th:text="${todo.description}"></div>
+                        <div height="20px">
+                        <span th:each="reference : ${todo.references}">
+                            <a th:href="@{'todos/'+${reference.referredId}}" th:text="'@'+${reference.referredId}+' '"></a>
+                        </span>
+                        </div>
+                    </td>
+                    <td th:text="${#dates.format(todo.createDateTime, 'yyyy/MM/dd HH시 mm분')}"></td>
+                    <td th:text="${#dates.format(todo.updateDateTime, 'yyyy/MM/dd HH시 mm분')}"></td>
+                </tr>
+                <tr class="collapse" th:id="'todo-collapse-'+${todo.id}">
+                    <td colspan="2"></td>
+                    <td colspan="3">
+                        <button th:if="${#strings.equalsIgnoreCase(todo.status, 'closed')}" type="button"
+                                class="btn btn-warning status-btn"
+                                th:attr="data-id=${todo.id},data-status=${todo.status}">다시열기
+                        </button>
+                        <button th:if="${#strings.equalsIgnoreCase(todo.status, 'open')}" type="button"
+                                class="btn btn-success status-btn"
+                                th:attr="data-id=${todo.id},data-status=${todo.status}">완료하기
+                        </button>
+                        <button type="button" class="btn btn-danger update-btn" data-toggle="modal"
+                                data-target="update-modal"
+                                th:attr="data-id=${todo.id},data-description=${todo.description},data-status=${todo.status}">
+                            <th:block th:each="reference : ${todo.references}">
+                                <input type="hidden" th:classappend="'update-' + ${todo.id} + '-references'"
+                                    th:attr="data-reference-id=${reference.id},data-reference-referred-id=${reference.referredId}">
+                            </th:block>
+                            수정
+                        </button>
+                        <button type="button" class="btn btn-info delete-btn" data-toggle="modal"
+                                data-target="#delete-modal"
+                                th:attr="data-id=${todo.id}">삭제
+                        </button>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"
+                    th:classappend="${pagination.hasPrev==false}? 'disabled'">
+                    <a class="page-link" aria-label="Previous"
+                       th:href="@{'todos?currentPage=' + ${pagination.startPage-1} + '&display=' + ${pagination.countPerPage}}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <th:block th:each="i: ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <li class="page-item" th:classappend="${pagination.currentPage  == i}? 'active'">
+                        <a class="page-link" th:text="${i}"
+                           th:href="@{'todos?currentPage=' + ${i} + '&display=' + ${pagination.countPerPage}}"></a>
+                    </li>
+                </th:block>
+                <li class="page-item"
+                    th:classappend="${pagination.hasNext==false}? 'disabled'">
+                    <a class="page-link" aria-label="Next"
+                       th:href="@{'todos?currentPage=' + ${pagination.endPage+1} + '&display=' + ${pagination.countPerPage}}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div>
+        <!-- Modal -->
+        <div class="modal fade" id="create-modal" tabindex="-1" role="dialog"
+             aria-labelledby="create-modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="create-modal-title">새 할일 작성하기</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="create-description">설명</label>
+                                <input class="form-control" id="create-description">
+                            </div>
+                            <div class="form-group">
+                                <label for="update-references">참조</label>
+                                <input class="form-control" id="create-references">
+                                <small class="form-text text-muted"> ex) @1 @2</small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary" id="create-submit">작성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="update-modal" tabindex="-1" role="dialog"
+             aria-labelledby="update-modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="update-modal-title">수정하기</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="update-description">설명</label>
+                                <input class="form-control" id="update-description" value="description">
+                            </div>
+                            <div class="form-group">
+                                <label for="update-references">참조</label>
+                                <input class="form-control" id="update-references" value="references">
+                                <small class="form-text text-muted"> ex) @1 @2</small>
+                            </div>
+                            <input type="hidden" id="update-id">
+                            <input type="hidden" id="update-status">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary" id="update-submit">수정</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog"
+             aria-labelledby="delete-modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <input type="hidden" id="delete-id">
+                    <div class="modal-body">
+                        정말 삭제하시겠습니까?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary" id="delete-submit">삭제하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="../reference-parser.js"></script>
+<script src="../create.js"></script>
+<script src="../update.js"></script>
+<script src="../delete.js"></script>
+</body>
+</html>

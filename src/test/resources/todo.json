@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "description": "집안일",
+  "createDateTime": "2019-02-16T06:30:16+09:00",
+  "status": "open",
+  "references": [
+    {
+      "id": 1,
+      "referredId": 2
+    },
+    {
+      "id": 2,
+      "referredId": 3
+    }
+  ]
+}
