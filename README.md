@@ -1,5 +1,5 @@
-# Spring Boot To Do
-할일 목록(todo list)을 관리하는 웹 어플리케이션입니다. 임베디드 톰캣, 인 메모리 데이터베이스(h2)를 사용해서 자바와 메이븐만 설치되어있으면 실행할 수 있습니다.
+# Spring Boot ToDo
+할일 목록을 관리하는 웹 어플리케이션입니다. 임베디드 톰캣, 인 메모리 데이터베이스(h2)를 사용해서 자바와 메이븐만 설치되어있으면 실행할 수 있습니다.
 
 ## Requirements
 - [JDK 1.8+](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
