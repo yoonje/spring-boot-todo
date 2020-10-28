@@ -17,9 +17,6 @@ $ h2.sh
 $ mvn spring-boot:run
 ```
 
-## Output
-![image](https://user-images.githubusercontent.com/12438898/52912007-c5951d80-32ee-11e9-916c-39c83d406096.png)
-
 ## REST API
 어플리케이션을 실행한 후 [스웨거 링크](http://localhost:8080/swagger-ui.html#/to-do-list-controller)로 접속하면 REST API를 확인할 수 있습니다.
 
